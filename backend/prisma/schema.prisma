@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  firstName      String
+  lastName      String
+  password  String
+  role      Role     @default(USER)
+  title     String?
+  userLevel     Int?
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  events      Event[]      @relation("CreatedEvents")
+  invitations Invitation[]
+
+  @@map("users")
+}
+
+model Event {
+  id          String        @id @default(uuid())
+  title       String
+  description String
+  date        DateTime
+  location    String
+  dressCode   DressCode
+  agenda      String
+  dinner      String
+  costs       Json
+  reminder    DateTime
+  status      EventStatus   @default(DRAFT)
+  createdBy   String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  recurring Boolean @default(false)
+  creator     User          @relation("CreatedEvents", fields: [createdBy], references: [id])
+  invitations Invitation[]
+
+  @@map("events")
+}
+
+model Invitation {
+  id             String           @id @default(uuid())
+  eventId        String
+  userId         String
+  status         InvitationStatus @default(PENDING)
+  responseDate   DateTime?
+  comment        String?
+  drinkSelections Json?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  event          Event            @relation(fields: [eventId], references: [id])
+  user           User             @relation(fields: [userId], references: [id])
+
+  @@unique([eventId, userId])
+  @@map("invitations")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  CANCELLED
+}
+
+enum DressCode {
+  FORMAL
+  SEMI_FORMAL
+  THEME
+  CASUAL
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  MAYBE
+}
