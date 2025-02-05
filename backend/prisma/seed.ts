@@ -1,5 +1,5 @@
 import { PrismaClient, Role } from "@prisma/client";
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 import { randomBytes } from "node:crypto";
 
 const DEFAULT_PASSWORD_LENGTH = 16;
@@ -26,6 +26,7 @@ async function main() {
     firstName: "Admin",
     lastName: "User",
     title: "System Administrator",
+    name: "Admin User"
   };
 
   const adminUser = await prisma.user.upsert({
@@ -35,13 +36,13 @@ async function main() {
       ...adminUserData,
     },
   });
-    
-    console.log("Database has been seeded. Admin user created with:");
-    console.log("Email: admin@example.com");
-    console.log("Temporary Password:", temporaryPassword);
-    console.log("Please remember to change your password upon first login.");
+
+  console.log("Database has been seeded. Admin user created with:");
+  console.log("Email: admin@example.com");
+  console.log("Temporary Password:", temporaryPassword);
+  console.log("Please remember to change your password upon first login.");
 }
-  
+
 
 main().catch((e) => {
   console.error(e);

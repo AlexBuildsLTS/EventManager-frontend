@@ -21,6 +21,7 @@ import {
   InputLabel,
   Select,
   Fade,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   Tooltip,
   Alert,
   Snackbar,
@@ -128,7 +129,7 @@ export const UsersPage = () => {
           variant="contained"
           startIcon={<Add />}
           onClick={() => handleOpenDialog()}
-          sx={{ 
+          sx={{
             borderRadius: 2,
             textTransform: 'none',
             px: 3,
@@ -152,7 +153,7 @@ export const UsersPage = () => {
                   </InputAdornment>
                 ),
               }}
-              sx={{ 
+              sx={{
                 '& .MuiOutlinedInput-root': {
                   borderRadius: 2,
                 }
@@ -165,7 +166,7 @@ export const UsersPage = () => {
               variant="outlined"
               startIcon={<FilterList />}
               onClick={(e) => setFilterAnchorEl(e.currentTarget)}
-              sx={{ 
+              sx={{
                 borderRadius: 2,
                 textTransform: 'none',
                 height: '100%',
@@ -190,7 +191,7 @@ export const UsersPage = () => {
               fullWidth
               variant="outlined"
               startIcon={<Sort />}
-              sx={{ 
+              sx={{
                 borderRadius: 2,
                 textTransform: 'none',
                 height: '100%',
@@ -205,8 +206,8 @@ export const UsersPage = () => {
       <Grid container spacing={3}>
         {users.map((user) => (
           <Grid item xs={12} md={6} lg={4} key={user.id}>
-            <Card 
-              sx={{ 
+            <Card
+              sx={{
                 borderRadius: 2,
                 '&:hover': {
                   boxShadow: (theme) => theme.shadows[4],
@@ -246,24 +247,24 @@ export const UsersPage = () => {
                 </Box>
 
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                  <Typography 
-                    variant="body2" 
+                  <Typography
+                    variant="body2"
                     color="text.secondary"
                     sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                   >
                     <Mail fontSize="small" />
                     {user.email}
                   </Typography>
-                  <Typography 
-                    variant="body2" 
+                  <Typography
+                    variant="body2"
                     color="text.secondary"
                     sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                   >
                     <Phone fontSize="small" />
                     {user.phone}
                   </Typography>
-                  <Typography 
-                    variant="body2" 
+                  <Typography
+                    variant="body2"
                     color="text.secondary"
                     sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                   >
@@ -305,8 +306,8 @@ export const UsersPage = () => {
         </MenuItem>
       </Menu>
 
-      <Dialog 
-        open={openDialog} 
+      <Dialog
+        open={openDialog}
         onClose={handleCloseDialog}
         maxWidth="sm"
         fullWidth
@@ -373,8 +374,8 @@ export const UsersPage = () => {
         onClose={() => setOpenSnackbar(false)}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
-        <Alert 
-          onClose={() => setOpenSnackbar(false)} 
+        <Alert
+          onClose={() => setOpenSnackbar(false)}
           severity="success"
           sx={{ width: '100%' }}
         >

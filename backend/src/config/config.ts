@@ -1,50 +1,20 @@
-import * as fs from 'fs';
-import * as path from 'path';
+import dotenv from 'dotenv';
 
-const filePath = path.join(__dirname, 'data.txt');
+dotenv.config();
 
-function readData(callback: (err: NodeJS.ErrnoException | null, data: string | null) => void) {
-    fs.readFile(filePath, 'utf8', callback);
-}
+const config = {
+    databaseUrl: process.env.DATABASE_URL,
+    jwtSecretKey: process.env.JWT_SECRET_KEY,
+    email: {
+        smtpHost: process.env.SMTP_HOST,
+        smtpPort: process.env.SMTP_PORT,
+        smtpUser: process.env.SMTP_USER,
+        smtpPass: process.env.SMTP_PASS,
+        smtpFrom: process.env.SMTP_FROM,
+    },
+    frontendUrl: process.env.FRONTEND_URL,
+    passwordResetUrl: process.env.PASSWORD_RESET_URL,
+    // Add other configuration variables as needed
+};
 
-
-function writeData(data: string, callback: (err: NodeJS.ErrnoException | null) => void) {
-    fs.writeFile(filePath, data, callback);
-}
-
-
-readData((err, data) => {
-    if (err) {
-        console.error("Failed to read data:", err);
-        return;
-    }
-
-    if (data) {
-
-        const lines = data.split('\n');
-        const numbers = lines.map(line => parseInt(line, 10)).filter(num => !isNaN(num));
-
-        const sum = numbers.reduce((acc, val) => acc + val, 0);
-        const average = numbers.length > 0 ? sum / numbers.length : 0;
-
-        console.log("Sum:", sum);
-        console.log("Average:", average);
-
-
-
-        const newData = `Sum: ${sum}\nAverage: ${average}`;
-        writeData(newData, (err) => {
-            if (err) {
-                console.error("Failed to write data:", err);
-            } else {
-                console.log("Successfully wrote sum and average to file.");
-            }
-
-        });
-
-
-    }
-
-
-
-});
+export default config;

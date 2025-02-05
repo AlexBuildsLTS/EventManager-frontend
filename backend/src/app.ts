@@ -1,39 +1,37 @@
 import express from 'express';
+import { json, urlencoded } from 'body-parser';
 import cors from 'cors';
-import { userRouter } from './routes/users.js';
-import { eventRouter } from './routes/events.js';
-import { invitationRouter } from './routes/invitations.js';
-import { errorHandler } from './middleware/error.js';
-import dotenv from "dotenv";
-import { prisma } from "./utils/prisma";
+import userRoutes from './routes/userRoutes.js';
+import eventRoutes from './routes/eventRoutes.js';
+import authRoutes from './routes/authRoutes.js';
+import { AppError } from './utils/appError';
+import { invitationRoutes } from './routes/invitationRoutes.js';
+import { emailRoutes } from './routes/emailRoutes.js';
 
-dotenv.config();
 const app = express();
 
-// Enable CORS for frontend
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-  credentials: true
-}));
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok' });
-});
-app.get ('/',
-    (req, res) => {
-      res.send ('API is running');
-    });
+app.use(cors());
+app.use(json());
+app.use(urlencoded({ extended: true }));
 
 // Routes
-app.use('/users', userRouter);
-app.use('/events', eventRouter);
-app.use('/invitations', invitationRouter);
+app.use('/api/users', userRoutes);
+app.use('/api/events', eventRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/invitations', invitationRoutes);
+app.use('/api/emails', emailRoutes);
 
-// Error handling
-app.use(errorHandler);
+// Error handling middleware
+app.use((err: AppError, _req: any, res: any, _next: any) => {
+    console.error(err.stack);
+    const status = err.status || 500;
+    const message = err.message || 'Internal Server Error';
+    res.status(status).json({
+        message
+    });
+});
 
+
+// Export the app for testing purposes AND for starting the server in index.ts
 export default app;

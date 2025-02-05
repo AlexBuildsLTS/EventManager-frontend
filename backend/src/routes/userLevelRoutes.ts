@@ -1,13 +1,10 @@
-import express from 'express';
-import { userLevelController } from '../controllers/userLevels.js';
-import { auth, adminOnly } from '../middleware/auth.js';
+import { Router } from 'express';
+// Import the controller for user levels
+// import { userLevelController } from '../controllers/userLevelController.js';
 
-const router = express.Router();
+const router = Router();
 
-router.post('/', auth, adminOnly, userLevelController.createUserLevel);
-router.get('/:id', auth, userLevelController.getUserLevel);
-router.put('/:id', auth, adminOnly, userLevelController.updateUserLevel);
-router.delete('/:id', auth, adminOnly, userLevelController.deleteUserLevel);
+// Route to get all user levels settings
+// router.get('/', userLevelController.getUserLevels);
 
-
-export { router as userLevelRoutes };
+export default router;

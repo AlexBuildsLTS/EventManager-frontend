@@ -1,13 +1,12 @@
 import { Router } from 'express';
-import { login, register } from '../controllers/authController.js';
-import { body, validationResult } from 'express-validator';
-
-
-
+import { authController } from '../controllers/AuthController.js';
 
 const router = Router();
 
-router.post('/login', login);
-router.post('/register', register);
+// Route for user login
+router.post('/login', authController.login);
 
-export { router as authRoutes };
+// Route for user registration
+router.post('/register', authController.register);
+
+export default router;

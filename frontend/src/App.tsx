@@ -1,21 +1,53 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { ThemeProvider, CssBaseline, Box } from '@mui/material';
+import { ThemeProvider, CssBaseline, Box, CircularProgress } from '@mui/material';
 import { lightTheme, darkTheme } from './theme/theme';
 import { Navbar } from './components/common/Navbar';
 import { DashboardPage } from './pages/DashboardPage';
 import { EventsPage } from './pages/EventsPage';
 import { UsersPage } from './pages/UsersPage';
 import { InvitationsPage } from './pages/InvitationsPage';
+import { SignInPage } from './pages/SignInPage';
+import { ProfilePage } from './pages/ProfilePage';
+import { useAuth } from './context/AuthContext';
 
 function App() {
-  const [mode, setMode] = useState<'light' | 'dark'>('light');
+  const [mode, setMode] = React.useState<'light' | 'dark'>('light');
+  const { isAuthenticated, isLoading } = useAuth();
 
-  const theme = useMemo(() => mode === 'light' ? lightTheme : darkTheme, [mode]);
+  const theme = React.useMemo(() => mode === 'light' ? lightTheme : darkTheme, [mode]);
 
   const toggleTheme = () => {
     setMode((prevMode) => prevMode === 'light' ? 'dark' : 'light');
   };
+
+  if (isLoading) {
+    return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Box 
+          sx={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            minHeight: '100vh',
+            bgcolor: 'background.default'
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      </ThemeProvider>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <SignInPage />
+      </ThemeProvider>
+    );
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -39,6 +71,7 @@ function App() {
                 <Route path="/events" element={<EventsPage />} />
                 <Route path="/users" element={<UsersPage />} />
                 <Route path="/invitations" element={<InvitationsPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
               </Routes>
             </Box>
           </Box>

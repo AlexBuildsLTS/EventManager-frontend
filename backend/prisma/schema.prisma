@@ -1,91 +1,109 @@
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL") // Corrected line
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  firstName      String
-  lastName      String
-  password  String
-  role      Role     @default(USER)
-  title     String?
-  userLevel     Int?
-  avatar    String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    id          String       @id @default(uuid())
+    email       String       @unique
+    password    String
+    name        String?
+    role        Role         @default(USER)
+    events      Event[]      @relation("createdEvents")
+    invitations Invitation[]
+    title       String?
+    firstName   String?
+    lastName    String?
+    userLevel   Int?
 
-  events      Event[]      @relation("CreatedEvents")
-  invitations Invitation[]
-
-  @@map("users")
+    @@map("users")
 }
 
 model Event {
-  id          String        @id @default(uuid())
-  title       String
-  description String
-  date        DateTime
-  location    String
-  dressCode   DressCode
-  agenda      String
-  dinner      String
-  costs       Json
-  reminder    DateTime
-  status      EventStatus   @default(DRAFT)
-  createdBy   String
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  recurring Boolean @default(false)
-  creator     User          @relation("CreatedEvents", fields: [createdBy], references: [id])
-  invitations Invitation[]
+    id          String       @id @default(uuid())
+    title       String
+    description String
+    date        DateTime
+    location    String
+    status      EventStatus  @default(DRAFT)
+    createdBy   String
+    creator     User         @relation("createdEvents", fields: [createdBy], references: [id])
+    invitations Invitation[]
+    dressCode   DressCode
+    menu        String
+    cost        Float
+    drinks      String
+    costDrinks  Float
+    totalCost   Float        @default(0)
+    topic       String
 
-  @@map("events")
-}
-
-model Invitation {
-  id             String           @id @default(uuid())
-  eventId        String
-  userId         String
-  status         InvitationStatus @default(PENDING)
-  responseDate   DateTime?
-  comment        String?
-  drinkSelections Json?
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  event          Event            @relation(fields: [eventId], references: [id])
-  user           User             @relation(fields: [userId], references: [id])
-
-  @@unique([eventId, userId])
-  @@map("invitations")
-}
-
-enum Role {
-  ADMIN
-  USER
+    @@map("events")
 }
 
 enum EventStatus {
-  DRAFT
-  PUBLISHED
-  CANCELLED
+    DRAFT
+    PUBLISHED
+    CANCELLED
 }
 
-enum DressCode {
-  FORMAL
-  SEMI_FORMAL
-  THEME
-  CASUAL
+model Invitation {
+    id             String           @id @default(uuid())
+    eventId        String
+    userId         String
+    status         InvitationStatus @default(PENDING)
+    user           User             @relation(fields: [userId], references: [id])
+    event          Event            @relation(fields: [eventId], references: [id])
+    emailLogs      EmailLog[]
+    comment        String
+    foodAllergy    String
+    drinkSelection String
+
+    @@map("invitations")
 }
 
 enum InvitationStatus {
-  PENDING
-  ACCEPTED
-  DECLINED
-  MAYBE
+    PENDING
+    ACCEPTED
+    DECLINED
+    MAYBE
+}
+
+model EmailLog {
+    id           String      @id @default(uuid())
+    invitationId String
+    status       EmailStatus
+    error        String
+    invitation   Invitation  @relation(fields: [invitationId], references: [id])
+    sentAt       DateTime    @default(now())
+
+    @@map("email_logs")
+}
+
+enum EmailStatus {
+    SENT
+    DELIVERED
+    FAILED
+    OPENED
+    CLICKED
+    ERROR
+    REMINDER_SENT
+    REMINDER_ERROR
+    UPDATE_SENT
+    UPDATE_ERROR
+}
+
+enum Role {
+    ADMIN
+    USER
+}
+
+enum DressCode {
+    FORMAL
+    SEMI_FORMAL
+    THEME
+    CASUAL
 }

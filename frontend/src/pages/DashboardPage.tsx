@@ -42,19 +42,19 @@ export const DashboardPage = () => {
       <Grid container spacing={3} sx={{ mb: 4 }}>
         {stats.map((stat, index) => (
           <Grid item xs={12} md={4} key={index}>
-            <Card 
-              sx={{ 
+            <Card
+              sx={{
                 height: '100%',
-                background: (theme) => 
-                  theme.palette.mode === 'dark' 
+                background: (theme) =>
+                  theme.palette.mode === 'dark'
                     ? 'linear-gradient(45deg, #1a237e 30%, #283593 90%)'
                     : 'linear-gradient(45deg, #e3f2fd 30%, #bbdefb 90%)',
               }}
             >
               <CardContent>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                  <Box sx={{ 
-                    p: 1, 
+                  <Box sx={{
+                    p: 1,
                     borderRadius: 2,
                     backgroundColor: 'rgba(255, 255, 255, 0.1)',
                   }}>
@@ -70,10 +70,10 @@ export const DashboardPage = () => {
                 <Typography variant="body2" color="text.secondary">
                   {stat.label}
                 </Typography>
-                <Typography 
-                  variant="caption" 
-                  sx={{ 
-                    display: 'flex', 
+                <Typography
+                  variant="caption"
+                  sx={{
+                    display: 'flex',
                     alignItems: 'center',
                     gap: 0.5,
                     mt: 1,
@@ -116,17 +116,17 @@ export const DashboardPage = () => {
                       </Box>
                     </Box>
                     <Box sx={{ textAlign: 'right' }}>
-                      <Typography 
-                        variant="body2" 
-                        color="success.main" 
+                      <Typography
+                        variant="body2"
+                        color="success.main"
                         sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}
                       >
                         <CheckCircle fontSize="small" />
                         {event.responses} responses
                       </Typography>
                       <Box sx={{ width: 100, mt: 1 }}>
-                        <LinearProgress 
-                          variant="determinate" 
+                        <LinearProgress
+                          variant="determinate"
                           value={(event.responses / event.attendees) * 100}
                           sx={{ height: 6, borderRadius: 3 }}
                         />

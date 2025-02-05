@@ -1,21 +1,23 @@
-import express, { Router, Request, Response } from 'express';
-import { eventController, eventService } from '../controllers/eventController.js';
-import { auth, ownerOrAdmin } from '../middleware/index.js';
+import { Router } from 'express';
+import { EventController } from '../controllers/EventController';
+import auth from '../middleware/authMiddleware';
 
-const router: Router = express.Router();
+const router = Router();
+const eventController = new EventController();
 
-router.post('/', auth, async (req:Request, res:Response) => eventController.createEvent(req, res));
-router.get('/', auth, async (req:Request, res:Response) => eventController.getEvents(req, res));
-router.get('/:id', auth, async (req:Request, res:Response) => eventController.getEvent(req, res));
-router.get('/user/:userId', auth, async (req:Request, res:Response) => eventController.getEventsByUserId(req, res));
+// Route to get all events
+router.get('/', auth, eventController.getAllEvents);
 
-router.patch('/:id', auth, ownerOrAdmin, async (req:Request, res:Response) => await eventController.updateEvent(req, res,));
+// Route to get an event by ID
+router.get('/:id', auth, eventController.getEvent);
 
-router.delete('/:id', auth, ownerOrAdmin, async (req: Request, res: Response) => await eventController.deleteEvent(req, res,));
+// Route to create a new event
+router.post('/', auth, eventController.createEvent);
 
-    
+// Route to update an event
+router.put('/:id', auth, eventController.updateEvent);
+
+// Route to delete an event
+router.delete('/:id', auth, eventController.deleteEvent);
+
 export default router;
-
-
-
-

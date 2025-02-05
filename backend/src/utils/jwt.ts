@@ -1,31 +1,23 @@
-// Existing code...
+import jwt from 'jsonwebtoken';
+import { JwtPayload } from '../models/index';
 
-// Import necessary modules. Generally available in most JWT libs
-import * as jwt from 'jsonwebtoken';
+// Function to generate a JWT token
+export const generateToken = (payload: any, secret: string, expiresIn: string | number): string => {
+    return jwt.sign(payload, secret, { expiresIn: Number(expiresIn) });
 
-// Function to verify JWT
-function verifyJWT(token: string, secret: string): any {
- try {
-    const decoded = jwt.verify(token, secret);
-    return decoded;
- } catch (error) {
-    // Handle verification errors (e.g., expired token, invalid signature)
-    return null;
- }
-}
+};
 
-// Export for other modules
-export { verifyJWT };
+;
 
+// Function to verify a JWT token
+export const verifyToken = (token: string, secret: string): JwtPayload | string => { // Added type for return
+    try {
+        const decoded = jwt.verify(token, secret);
+        return decoded as JwtPayload; // Type assertion for decoded payload
+    } catch (error) {
+        return "Invalid token"; // Or throw the error if you prefer: throw new Error('Invalid token');
+    }
+};
 
-
-
-// Existing code...
-// Function to generate JWT
-function generateJWT(payload: any, secret: string, expiresIn: string): string {
-  const token = jwt.sign(payload, secret, { expiresIn });
-  return token;
-}
-
-// Export for other modules
-export { generateJWT };
+export { JwtPayload };
+export { jwt };

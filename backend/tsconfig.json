@@ -1,13 +1,17 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "module": "ESNext",
+    "target": "ES2020", // Or a more recent version if needed
+    "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["node"]
+    "moduleResolution": "node",
+    "outDir": "./dist", //  Add output directory
+    "rootDir": "./src", // Add root directory
+    "sourceMap": true, // Enable source maps
+    "declaration": true // Generate declaration files (optional)
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist"], // Exclude node_modules and the output directory
+  "include": ["src/**/*"] // Correctly include only src
 }

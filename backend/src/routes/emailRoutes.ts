@@ -1,10 +1,17 @@
 import express from 'express';
-import { emailController } from '../controllers/email.js';
-import { auth } from '../middleware/auth.js';
+import { Router } from 'express';
+import { emailController } from '../controllers/EmailController.js';
+
+const emailRoutes = Router();
+
+
+
 
 const router = express.Router();
 
-router.post('/', auth, emailController.sendEmail);
+router.post('/', emailController.sendEmail);
 
+export { router as emailRoutes }
 
-export { router as emailRoutes };
+// Export the router with a name
+export default router;

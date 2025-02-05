@@ -1,12 +1,29 @@
-import { invitationController } from '../controllers/invitations.js';
-import { auth, ownerOrAdmin } from '../middleware/auth.js';
-import express from 'express';
+import { Router } from 'express';
+import { invitationController } from '../controllers/InvitationsController';
+import auth from '../middleware/authMiddleware';
 
-    const router = express.Router();
+    
+const router = Router();
 
-    router.post('/', auth, invitationController.createInvitation);
-    router.patch('/:id/status', auth, invitationController.updateInvitationStatus);
-    router.get('/user/:userId', auth, invitationController.getInvitationsByUser);
-    router.get('/event/:eventId', auth, ownerOrAdmin, invitationController.getInvitationsByEvent);
+// Route to get all invitations
 
-    export { router as invitationRoutes };
+ 
+
+
+router.get('/', auth, invitationController.getAllInvitations);
+router.get('/:id', auth, invitationController.getInvitationById);
+router.post('/', auth, invitationController.createInvitation);
+
+// Route to update an invitation's status
+router.patch('/:id/status', auth, invitationController.updateInvitationStatus);
+
+// Route to get invitations by user ID
+router.get('/user/:userId', auth, invitationController.getInvitationsByUser);
+
+// Route to get invitations by event ID
+router.get('/event/:eventId', auth, invitationController.getInvitationsByEvent);
+
+router.delete('/:id', auth, invitationController.createInvitation);
+router.post('/send', auth, invitationController.sendInvitations);
+
+export { router as invitationRoutes };
