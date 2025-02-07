@@ -21,8 +21,6 @@ import {
   InputLabel,
   Select,
   Fade,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  Tooltip,
   Alert,
   Snackbar,
 } from '@mui/material';
